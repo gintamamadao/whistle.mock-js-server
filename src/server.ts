@@ -41,14 +41,14 @@ export const mockServer = async (req, res) => {
     const settingInfo = getSettingInfo(pathname, serverSetting)
 
     if (!settingInfo) {
-      passThroughReq(serverSetting, req)
+      passThroughReq(serverSetting, req, res)
       return
     }
 
     const filePath: string = getFilePath(fileDir, settingInfo)
 
     if (!filePath) {
-      passThroughReq(serverSetting, req)
+      passThroughReq(serverSetting, req, res)
       return
     }
 
@@ -58,6 +58,7 @@ export const mockServer = async (req, res) => {
 
     const mimeType = mime.lookup(filePath)
     const ext = extname(filePath)
+    res.setHeader('mock-js-server-true-url', `file: ${filePath}`)
     res.setHeader('content-type', mimeType)
 
     if (ext === '.json') {

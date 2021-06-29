@@ -47,7 +47,7 @@ export const getFilePath = (fileDir: string, settingInfo: any) => {
   return ''
 }
 
-export const passThroughReq = (serverSetting: any, req: any) => {
+export const passThroughReq = (serverSetting: any, req: any, res: any) => {
   const originalReq = req.originalReq
   const { relativeUrl } = originalReq
   const { host = '', pathHostMap = {} } = serverSetting || {}
@@ -57,7 +57,9 @@ export const passThroughReq = (serverSetting: any, req: any) => {
       proxyHost = pathHostMap[key]
     }
   }
-  req.passThrough(`${proxyHost}${relativeUrl}`)
+  const url = `${proxyHost}${relativeUrl}`
+  res.setHeader('mock-js-server-true-url', url)
+  req.passThrough(url)
 }
 
 export const readFileByStream = (filePath: string) => {
